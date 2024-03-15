@@ -13,4 +13,4 @@ or follow me on:
  [Google scholar](https://scholar.google.com/citations?user=p9c3YKsAAAAJ)
  [Github](https://github.com/DanielF29)
 
-[Home](/) | [About](/about) | [Projects](/projects)
+[Home](/) | [About](/about) | [Projects](/projects) | [Publications](/publications) 
