@@ -16,4 +16,4 @@ Here are some of the projects I've worked on:
 
 - **Project 4**: Hierarchical quadcopter position and orientation control, with a Kalman filter applied for the sensor signals' preprocessing.
 
-[Home](/) | [About](/about) | [Contact](/contact) | [Publications](/publications)
+[Home](/) | [About](/about) | [Contact](/contact) | [Publications](/publications) | [Current Mentoring Project](/current_mentoring_project) 

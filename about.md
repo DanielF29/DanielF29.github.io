@@ -72,4 +72,4 @@ Feel free to connect with me via email at ing.daniel.bin@gmail.com or on [Linked
 
 
 
-[Home](/) | [Projects](/projects) | [Contact](/contact) | [Publications](/publications)
+[Home](/) | [Projects](/projects) | [Contact](/contact) | [Publications](/publications) | [Current Mentoring Project](/current_mentoring_project) 

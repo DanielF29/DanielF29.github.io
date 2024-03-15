@@ -23,4 +23,4 @@ Additionally, I have a broad interest in deep learning news and it's breakthroug
 
 Feel free to reach out to me via email at ing.daniel.bin@gmail.com or check [Contact](/contact).
 
-[About](/about) | [Projects](/projects) | [Contact](/contact) | [Publications](/publications)
+[About](/about) | [Projects](/projects) | [Contact](/contact) | [Publications](/publications) | [Current Mentoring Project](/current_mentoring_project) 

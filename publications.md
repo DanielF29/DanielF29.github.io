@@ -33,4 +33,4 @@ MACFE is a proposal for meta-learning to find the best input feature transformat
 [SuSana Distancia is all you need: Enforcing class separability in metric learning via two novel distance-based loss functions for few-shot image classification](https://arxiv.org/pdf/2305.09062v3.pdf).
 [Guided Deep Metric Learning](https://openaccess.thecvf.com/content/CVPR2022W/LXCV/papers/Gonzalez-Zapata_Guided_Deep_Metric_Learning_CVPRW_2022_paper.pdf).
 
-[Home](/) | [About](/about) | [Projects](/projects) | [Contact](/contact)
+[Home](/) | [About](/about) | [Projects](/projects) | [Contact](/contact) | [Current Mentoring Project](/current_mentoring_project) 
