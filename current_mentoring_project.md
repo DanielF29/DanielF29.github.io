@@ -11,4 +11,4 @@ Healthcare professionals must be able to develop trust in their tools, even for 
 Enhancing robust interpretability in AI models for kidney stone classification advances the technology's efficacy and ensures its alignment with the critical needs for transparency, trust, and ethical decision-making in medical
 diagnostics. Hence the proposed research topic on Robust Interpretability.
 
-[Home](/) | [About](/about) | [Projects](/projects) | [Contact](/contact) | [Publications](/publications) | [Current Mentoring Project](/current_mentoring_project) 
+[Home](/) | [About](/about) | [Projects](/projects) | [Contact](/contact) | [Publications](/publications) 
