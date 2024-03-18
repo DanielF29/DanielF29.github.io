@@ -1,6 +1,5 @@
 # [DanielF29.github.io](https://danielf29.github.io/)
 
-<img src="/images/DFA_audi_foto_small.png" alt="Selfie" width="400"/>
 
 ## Welcome to my website! 
 Here, you can learn more about me, see the projects I’ve worked on, and find out how to contact me.
