@@ -1,7 +1,6 @@
 # [DanielF29.github.io](https://danielf29.github.io/)
 
-
-## Welcome to my website! 
+## Hi, Welcome to my website!
 Here, you can learn more about me, see the projects I’ve worked on, and find out how to contact me.
 
 ### Basic personal Info:
