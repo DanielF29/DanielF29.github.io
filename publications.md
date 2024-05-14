@@ -16,8 +16,10 @@ Some of my research areas of interest are:
 Here are some of my publications and collaborations:
 
 **Works on Explainable AI and Medical Images**: 
+
 | Feature       | Description                    |
 |---------------|--------------------------------|
+| **Preview**   | ![Preview](https://openaccess.thecvf.com/content/CVPR2023W/LatinX/papers/Flores-Araiza_Deep_Prototypical-Parts_Ease_Morphological_Kidney_Stone_Identification_and_Are_Competitively_CVPRW_2023_paper.pdf) |
 | **Preview**   | ![Preview](https://openaccess.thecvf.com/content/CVPR2023W/LatinX/papers/Flores-Araiza_Deep_Prototypical-Parts_Ease_Morphological_Kidney_Stone_Identification_and_Are_Competitively_CVPRW_2023_paper.pdf) |
 
 - Focus on the self-explainable AI subfield of XAI and the case study of kidney stone images.
