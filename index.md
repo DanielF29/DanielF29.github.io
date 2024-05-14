@@ -56,7 +56,7 @@ function copyEmail() {
         margin: 4px 2px;
         cursor: pointer;
         border-radius: 12px;
-        transition-duration: 0.4s;
+        transition-duration: 0.2s;
     }
 
     #copyButton:hover {
