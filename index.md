@@ -7,9 +7,9 @@ permalink: /
 <div style="display: flex; align-items: flex-start;">
     <img src="/images/DFA_outframed.png" alt="Selfie" style="max-width: 25%; height: auto; margin-right: 20px;"/>
     <div>
-        <h1>Welcome to My Personal Webpage</h1>
+        <h1>Welcome, </h1>
 
-        <p>Welcome to my website! Here, you can learn more about me, see the projects I've worked on, and find out how to contact me.</p>
+        <p>Here, you can learn more about me, see the projects I've worked on, and find out how to contact me.</p>
 
         <h2>Basic personal Info:</h2>
 
