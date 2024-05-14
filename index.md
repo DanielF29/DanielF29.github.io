@@ -44,9 +44,8 @@ function copyEmail() {
 </script>
 
 <style>
-
     #copyButton {
-        background-color: #ADD8E6; /* light blue */ 
+        background-color: #4CAF50; /* Green */ 
         border: none;
         color: black;
         padding: 5px 10px;
@@ -67,7 +66,7 @@ function copyEmail() {
     }
 
     .button {
-        background-color: #ADD8E6; /* Green */
+        background-color: #ADD8E6; /* light blue */
         border: none;
         color: black;
         padding: 5px 10px;
