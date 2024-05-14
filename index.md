@@ -4,7 +4,7 @@ title: Home
 permalink: /
 ---
 
-<img src="/images/DFA_audi_foto_small.png" alt="Selfie" width="400"/>
+<img src="/images/DFA_edited_3DSurface.png" alt="Selfie" width="400"/>
 <!-- 
 ![Selfie](/images/DFA_audi_foto_small.png)
 -->
