@@ -44,9 +44,6 @@ function copyEmail() {
 </script>
 
 <style>
-    body {
-        background: linear-gradient(to top left, #f0f8ff, #87ceeb);
-    }
 
     #copyButton {
         background-color: #ADD8E6; /* light blue */ 
