@@ -22,7 +22,13 @@ permalink: /
 
         <p>Feel free to reach out to me via email at <span id="email">ing.daniel.bin@gmail.com</span> <button id="copyButton" onclick="copyEmail()">Copy Email</button> or check <a href="/contact">Contact</a>.</p>
 
-        <p><a href="/about">About</a> | <a href="/projects">Projects</a> | <a href="/contact">Contact</a> | <a href="/publications">Publications</a> | <a href="/current_mentoring_project">Current Mentoring Project</a></p>
+        <p>
+            <a href="/about" class="button">About</a> | 
+            <a href="/projects" class="button">Projects</a> | 
+            <a href="/contact" class="button">Contact</a> | 
+            <a href="/publications" class="button">Publications</a> | 
+            <a href="/current_mentoring_project" class="button">Current Mentoring Project</a>
+        </p>
     </div>
 </div>
 
@@ -38,10 +44,14 @@ function copyEmail() {
 </script>
 
 <style>
+    body {
+        background: linear-gradient(to top left, #f0f8ff, #87ceeb);
+    }
+
     #copyButton {
-        background-color: #4CAF50; /* Green */
+        background-color: #ADD8E6; /* light blue */ 
         border: none;
-        color: white;
+        color: black;
         padding: 5px 10px;
         text-align: center;
         text-decoration: none;
@@ -58,4 +68,26 @@ function copyEmail() {
         color: black;
         border: 2px solid #4CAF50;
     }
+
+    .button {
+        background-color: #ADD8E6; /* Green */
+        border: none;
+        color: black;
+        padding: 5px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 12px;
+        transition-duration: 0.2s;
+    }
+
+    .button:hover {
+        background-color: white;
+        color: black;
+        border: 2px solid #ADD8E6;
+    }
+
 </style>
