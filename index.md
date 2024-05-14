@@ -20,7 +20,7 @@ permalink: /
 
         <h2>Basic Contact information:</h2>
 
-        <p>Feel free to reach out to me via email at <span id="email">ing.daniel.bin@gmail.com</span> <button onclick="copyEmail()">Copy Email</button> or check <a href="/contact">Contact</a>.</p>
+        <p>Feel free to reach out to me via email at <span id="email">ing.daniel.bin@gmail.com</span> <button id="copyButton" onclick="copyEmail()">Copy Email</button> or check <a href="/contact">Contact</a>.</p>
 
         <p>[<a href="/about">About</a>] | [<a href="/projects">Projects</a>] | [<a href="/contact">Contact</a>] | [<a href="/publications">Publications</a>] | [<a href="/current_mentoring_project">Current Mentoring Project</a>]</p>
     </div>
