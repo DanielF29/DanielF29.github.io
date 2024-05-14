@@ -18,9 +18,19 @@ permalink: /
 
         <p>Additionally, I have a broad interest in deep learning news and its breakthroughs, gaming, new tech gadgets, and the exploration of space.</p>
 
+        <h2>Skills</h2>
+        <ul>
+            <li><strong>Programming Languages:</strong> Python (5+ years), R, C, C++, C#</li>
+            <li><strong>Databases:</strong> MySQL, Postgres</li>
+            <li><strong>Tools and IDEs:</strong> Git, Vim, Docker, Sklearn, Pandas, Pytorch, Matplotlib, Plotly, Visual Studio Code</li>
+            <li><strong>Other Software:</strong> NetLogo, MATLAB, Solid Edge, MPLAB, EAGLE</li>
+            <li><strong>Personal Skills:</strong> Critical-thinking, Collaborative, Problem-solving, Proactive, Oral and written communication</li>
+        </ul>
+
         <h2>Basic Contact information:</h2>
 
         <p>Feel free to reach out to me via email at <span id="email">ing.daniel.bin@gmail.com</span> <button id="copyButton" onclick="copyEmail()">Copy Email</button> or check <a href="/contact">Contact</a>.</p>
+
 
         <p>
             <a href="/about" class="button">About</a> | 
