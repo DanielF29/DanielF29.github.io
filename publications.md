@@ -15,7 +15,7 @@ Some of my research areas of interest are:
 
 Here are some of my publications and collaborations:
 
-## Works on Explainable AI and Medical Images
+## Works on Explainable AI and Medical Images for Computer-Aided Diagnosis (CADx)
 
 | Title                                                                                         | Preview                                                               | Link                                                                                                         |
 |-----------------------------------------------------------------------------------------------|----------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
@@ -28,7 +28,7 @@ Here are some of my publications and collaborations:
 | Causal Scoring Medical Image Explanations: A Case Study On Ex-vivo Kidney Stone Images        | <img src="/images/Causal_scoring_GradCAM.png" alt="Preview" width="400"/>           | <a href="https://arxiv.org/pdf/2309.01921.pdf" target="_blank">PDF</a>                                                                  |
 | MACFE: A Meta-learning and Causality Based Feature Engineering Framework                      | <img src="/images/MACFE.png" alt="Preview" width="400"/>           | <a href="https://arxiv.org/pdf/2207.04010.pdf" target="_blank">PDF</a>                                                                  |
 
-## Works on Medical Images
+## Varied works on Medical Images
 
 | Title                                                                                         | Preview                                                               | Link                                                                                                         |
 |-----------------------------------------------------------------------------------------------|----------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
@@ -36,7 +36,7 @@ Here are some of my publications and collaborations:
 | FAU-Net: An Attention U-Net Extension with Feature Pyramid Attention for Prostate Cancer Segmentation | <img src="/images/FauNet.png" alt="Preview" width="400"/>           | <a href="https://arxiv.org/pdf/2309.01322.pdf" target="_blank">PDF</a>                                                                  |
 | Boosting kidney stone identification in endoscopic images using two-step transfer learning    | <img src="/images/Two_step_TL.png" alt="Preview" width="400"/>           | <a href="https://arxiv.org/pdf/2210.13654.pdf" target="_blank">PDF</a>                                                                  |
 
-## Works on Metrics Learning
+## Works on "Metric Learning"
 
 | Title                                                                                         | Preview                                                               | Link                                                                                                         |
 |-----------------------------------------------------------------------------------------------|----------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
