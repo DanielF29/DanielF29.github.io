@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Digital_Daniel
+title: Home
 permalink: /
 ---
 
