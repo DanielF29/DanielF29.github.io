@@ -34,7 +34,7 @@ permalink: /
         Also you can 
             <a href="/files/20240525_CV_Daniel_Flores.pdf" download>
                 <button id="copyButton">
-                    Daniel's CV
+                    Download my CV 
                 </button>
             </a>
         </p>
