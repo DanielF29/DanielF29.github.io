@@ -29,16 +29,15 @@ permalink: /
 
         <h2>Basic Contact information:</h2>
 
-        <p>Feel free to reach out to me via email at <span id="email">ing.daniel.bin@gmail.com</span> <button id="copyButton" onclick="copyEmail()">Copy Email</button> or check <a href="/contact">Contact</a>.</p>
+        <p>Feel free to reach out to me via email at <span id="email">ing.daniel.bin@gmail.com</span> <button id="copyButton" onclick="copyEmail()">Copy Email</button> or check <a href="/contact">Contact</a>.
 
-        <h2> Download My CV </h2>
-        <div style="text-align: center; margin-top: 20px;">
+        Also you can 
             <a href="/files/20240525_CV_Daniel_Flores.pdf" download>
-                <button style="padding: 10px 20px; font-size: 16px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                    Download My CV
+                <button id="copyButton">
+                    Daniel's CV
                 </button>
             </a>
-        </div>
+        </p>
 
         <p>
             <a href="/about" class="button">About</a> | 
