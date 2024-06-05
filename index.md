@@ -32,7 +32,7 @@ permalink: /
         <p>Feel free to reach out to me via email at <span id="email">ing.daniel.bin@gmail.com</span> <button id="copyButton" onclick="copyEmail()">Copy Email</button> or check <a href="/contact">Contact</a>.
 
         Also you can 
-            <a href="/files/20240525_CV_Daniel_Flores.pdf" download>
+            <a href="/pdfs/20240525_CV_Daniel_Flores.pdf" download>
                 <button id="copyButton">
                     Download my CV 
                 </button>
