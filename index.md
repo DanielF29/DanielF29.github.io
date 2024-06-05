@@ -4,8 +4,8 @@ title: Home
 permalink: /
 ---
 
- <head>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+<head>
+    <link rel="icon" type="image/x-icon" href="favicon.ico?">
 </head>
 
 <div style="display: flex; align-items: flex-start;">
