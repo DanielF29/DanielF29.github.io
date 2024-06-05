@@ -4,6 +4,10 @@ title: Home
 permalink: /
 ---
 
+ <head>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+
 <div style="display: flex; align-items: flex-start;">
     <img src="/images/DFA_outframed.png" alt="Selfie" style="max-width: 25%; height: auto; margin-right: 20px;"/>
     <div>
