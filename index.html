@@ -161,7 +161,7 @@
       transform: translateY(-2px);
     }
     .btn-nav {
-      background: #7dd3fc;          /* was the hover color, now default */
+      background: var(--accent);    /* deeper sky as default */
       color: #0a0e17;
       padding: 0.45rem 1.1rem;
       border-radius: var(--radius-sm);
@@ -169,7 +169,7 @@
       font-size: 0.85rem;
     }
     .btn-nav:hover {
-      background: var(--accent);    /* darker sky on hover */
+      background: #7dd3fc;          /* lighter sky on hover */
       color: #0a0e17;
     }
 
@@ -936,6 +936,9 @@
     footer p { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; }
     footer a { color: var(--text-muted); font-size: 0.8rem; }
     footer a:hover { color: var(--accent); }
+    footer .visit-stats { margin-top: 0.85rem; opacity: 0.85; }
+    footer .visit-stats:hover { opacity: 1; }
+    footer .visit-stats img { height: 20px; }
 
     /* =====================================================
        BACK TO TOP
@@ -1983,6 +1986,38 @@
         <a href="pdfs/Daniel_Flores_CV_2026.pdf" download>Download CV</a>
         &nbsp;·&nbsp;
         <a href="https://github.com/DanielF29" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </p>
+      <!--
+        ===========================================================
+        SITE VISIT STATS — Nivel 2 (badge público, sin signup)
+        ===========================================================
+        El SVG abajo es servido por visitor-badge.laobi.icu y se incrementa
+        en cada carga única (filtrado por page_id). Es público pero opaco:
+        solo muestra un total acumulado, sin desglose.
+
+        FUTURE UPGRADES (when richer analytics matter):
+          - Nivel 3 (self-hosted dashboard, no third party):
+              GitHub Action programado (cron diario) que llama a la API
+              /repos/:owner/:repo/traffic/views, acumula JSON en stats/,
+              y una página /stats.html lo grafica con Chart.js.
+              Requiere: PAT con scope `repo`, ~30 min de setup.
+          - Nivel 4 (servicio profesional con dashboard rico):
+              GoatCounter (gratis, dashboard público, sin cookies):
+                <script data-goatcounter="https://USERNAME.goatcounter.com/count"
+                        async src="//gc.zgo.at/count.js"></script>
+              Da: pageviews por URL, referrers, países, dispositivos,
+              sesión histórica completa.
+        ===========================================================
+      -->
+      <p class="visit-stats" style="margin-top:0.75rem;">
+        <a href="https://visitor-badge.laobi.icu/badge?page_id=DanielF29.github.io"
+           target="_blank" rel="noopener noreferrer"
+           aria-label="Site visit counter — opens badge in new tab"
+           title="Total unique site visits (counter-only — for richer stats see GitHub Insights)">
+          <img src="https://visitor-badge.laobi.icu/badge?page_id=DanielF29.github.io&left_color=%231e293b&right_color=%2338bdf8&left_text=site%20visits"
+               alt="site visits badge"
+               style="vertical-align:middle;">
+        </a>
       </p>
     </div>
   </footer>
