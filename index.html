@@ -161,7 +161,7 @@
       transform: translateY(-2px);
     }
     .btn-nav {
-      background: var(--accent);
+      background: #7dd3fc;          /* was the hover color, now default */
       color: #0a0e17;
       padding: 0.45rem 1.1rem;
       border-radius: var(--radius-sm);
@@ -169,7 +169,7 @@
       font-size: 0.85rem;
     }
     .btn-nav:hover {
-      background: #7dd3fc;
+      background: var(--accent);    /* darker sky on hover */
       color: #0a0e17;
     }
 
@@ -1017,9 +1017,227 @@
       .contact-email-row { flex-direction: column; }
       #back-to-top { bottom: 1.25rem; right: 1.25rem; }
     }
+
+    /* =====================================================
+       FLOCKING CANVAS + MUSIC CONTROLS
+    ===================================================== */
+    #flock-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.55;
+      transition: opacity 0.3s;
+    }
+    /* When mouse-predator mode is on, hide system cursor + boost canvas visibility */
+    body.mouse-predator { cursor: none; }
+    body.mouse-predator #flock-canvas { opacity: 0.85; }
+    /* Make body bg transparent so canvas shows; keep alt sections semi-transparent */
+    body { background: var(--bg); position: relative; }
+    .section-alt { background: rgba(17, 24, 39, 0.85); position: relative; z-index: 1; }
+    #navbar, #hero, .section, footer { position: relative; z-index: 1; }
+    /* back-to-top stays position:fixed (set above) — restate z-index here so the
+       footer (z-index:1) doesn't paint over it when scrolled to the bottom */
+    #back-to-top { z-index: 1000; }
+    /* Hero bg-grid stays behind content but above canvas */
+    .hero-bg-grid, .hero-bg-glow { z-index: 0; }
+
+    /* Music control pill — fixed top-left */
+    #music-control {
+      position: fixed;
+      top: 84px;
+      left: 20px;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px;
+      background: rgba(10, 14, 23, 0.78);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+    }
+    #music-control button {
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.2s;
+      padding: 0;
+    }
+    #music-control button:hover {
+      color: var(--accent);
+      background: var(--accent-glow);
+    }
+    #music-control button.active {
+      color: var(--accent);
+      background: var(--accent-glow);
+    }
+    #music-control button svg { width: 16px; height: 16px; fill: currentColor; }
+    #music-control .music-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      padding: 0 8px 0 4px;
+      letter-spacing: 0.04em;
+    }
+    /* Pulse hint on first load */
+    #music-control.hint::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 9999px;
+      border: 2px solid var(--accent);
+      animation: hintPulse 2s ease-out infinite;
+      pointer-events: none;
+    }
+    @keyframes hintPulse {
+      0%   { opacity: 0.7; transform: scale(1); }
+      100% { opacity: 0;   transform: scale(1.15); }
+    }
+
+    /* ----- Seek bar ----- */
+    #music-seek-wrap {
+      position: relative;
+      width: 0;
+      overflow: visible;
+      transition: width 0.35s ease;
+      display: flex;
+      align-items: center;
+    }
+    #music-control.playing #music-seek-wrap { width: 110px; }
+    #music-seek-track {
+      position: relative;
+      width: 100%;
+      height: 4px;
+      background: rgba(148, 163, 184, 0.25);
+      border-radius: 2px;
+      pointer-events: none;
+    }
+    #music-seek-fill {
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      border-radius: 2px;
+    }
+    #music-seek-hover {
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 0%;
+      background: rgba(56, 189, 248, 0.2);
+      border-radius: 2px;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    #music-seek-wrap:hover #music-seek-hover { opacity: 1; }
+    /* Native range input — kept for keyboard accessibility, but mouse/touch
+       go through to the wrap's pointer handler (more reliable than range click). */
+    #music-seek {
+      position: absolute;
+      inset: -8px 0;
+      width: 100%;
+      margin: 0;
+      opacity: 0;
+      pointer-events: none;   /* mouse handled by #music-seek-wrap below */
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+    }
+    /* Make the wrap a comfortable click target without breaking layout */
+    #music-seek-wrap {
+      cursor: pointer;
+      min-height: 22px;      /* real height for clicking, track centers inside */
+      align-items: center;
+      touch-action: none;    /* lets us preventDefault & handle drag on touch */
+    }
+    /* Visible thumb on the fill */
+    #music-seek-fill::after {
+      content: '';
+      position: absolute;
+      right: -5px; top: 50%;
+      transform: translateY(-50%);
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 6px rgba(56, 189, 248, 0.7);
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    #music-control.playing #music-seek-fill::after { opacity: 1; }
+    /* Tooltip */
+    #music-tooltip {
+      position: absolute;
+      bottom: 18px;
+      transform: translateX(-50%);
+      padding: 3px 7px;
+      background: rgba(10, 14, 23, 0.95);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--accent);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.12s;
+      white-space: nowrap;
+    }
+    #music-seek-wrap:hover #music-tooltip { opacity: 1; }
+
+    @media (max-width: 600px) {
+      #music-control { top: 78px; left: 12px; }
+      #music-control .music-label { display: none; }
+      #music-control.playing #music-seek-wrap { width: 80px; }
+      #flock-canvas { opacity: 0.4; }
+    }
   </style>
 </head>
 <body>
+
+  <!-- ===================================================
+       FLOCKING BACKGROUND CANVAS
+  =================================================== -->
+  <canvas id="flock-canvas" aria-hidden="true"></canvas>
+
+  <!-- ===================================================
+       BACKGROUND MUSIC + CONTROLS
+  =================================================== -->
+  <audio id="bg-music" src="audio/seemann.mp3" preload="metadata" crossorigin="anonymous"></audio>
+  <div id="music-control" class="hint" role="group" aria-label="Background music controls">
+    <button id="music-toggle" aria-label="Play / pause background music" title="Play / pause">
+      <!-- Play icon -->
+      <svg id="music-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    </button>
+    <button id="music-loop" aria-label="Toggle loop" title="Repeat song">
+      <svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
+    </button>
+    <button id="mouse-predator" aria-label="Toggle mouse as predator" title="Make your cursor a predator">
+      <!-- Crosshair / target icon -->
+      <svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="12" cy="12" r="6" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="12" cy="12" r="1.5"/></svg>
+    </button>
+    <div id="music-seek-wrap" aria-hidden="true">
+      <div id="music-seek-track">
+        <div id="music-seek-fill"></div>
+        <div id="music-seek-hover"></div>
+      </div>
+      <input id="music-seek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek through song">
+      <div id="music-tooltip"></div>
+    </div>
+    <span class="music-label" id="music-label">music</span>
+  </div>
+
+  <!-- Debug overlay (only shown when ?debug=1 in URL) -->
+  <div id="flock-debug" style="position:fixed;bottom:8px;left:8px;z-index:9999;font:11px/1.3 'JetBrains Mono',monospace;color:#7dd3fc;background:rgba(10,14,23,0.85);padding:6px 10px;border:1px solid #1e293b;border-radius:6px;display:none;white-space:pre"></div>
 
   <!-- ===================================================
        NAVBAR
@@ -1040,7 +1258,7 @@
         <li><a href="#projects">Projects</a></li>
         <li><a href="#contact">Contact</a></li>
         <li class="hire-li">
-          <a href="mailto:ing.daniel.bin@gmail.com" class="btn btn-nav">Hire Me</a>
+          <a href="mailto:ing.daniel.bin@gmail.com" class="btn btn-nav">Get in touch</a>
         </li>
       </ul>
     </div>
@@ -1826,7 +2044,7 @@
     sections.forEach(s => sectionObserver.observe(s));
 
     // ---- Typewriter ----
-    const phrases = ['ML Engineer', 'Data Scientist', 'AI Researcher', 'XAI Specialist', 'LLM Fine-Tuner', 'PhD Candidate'];
+    const phrases = ['ML Engineer', 'Data Scientist', 'AI Researcher', 'XAI Specialist', 'LLM Fine-Tuner', 'Ph.D. in Computer Science'];
     const tyEl = document.getElementById('typewriter-text');
     let phraseIdx = 0, charIdx = 0, deleting = false;
     function type() {
@@ -1921,6 +2139,665 @@
     document.getElementById('back-to-top').addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
+
+    // ===========================================================
+    // FLOCKING (BOIDS) SIMULATION + AUDIO-REACTIVE PREDATORS
+    // ===========================================================
+    (function () {
+      const canvas = document.getElementById('flock-canvas');
+      const ctx = canvas.getContext('2d');
+      let W = 0, H = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      function resize() {
+        W = window.innerWidth;
+        H = window.innerHeight;
+        canvas.width = W * dpr;
+        canvas.height = H * dpr;
+        canvas.style.width = W + 'px';
+        canvas.style.height = H + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      // ----- Boid class -----
+      class Boid {
+        constructor(x, y, isPredator = false) {
+          this.x = x; this.y = y;
+          const a = Math.random() * Math.PI * 2;
+          const s = (isPredator ? 1.6 : 1.0) * (0.7 + Math.random() * 0.6);
+          this.vx = Math.cos(a) * s;
+          this.vy = Math.sin(a) * s;
+          this.isPredator = isPredator;
+          // Prey base maxSpeed — gets boosted when predators around (panic mode)
+          this.basePreySpeed = 0.95;
+          this.maxSpeed = isPredator ? 2.7 : this.basePreySpeed;
+          // Audio-spawned predators: 8 (just slightly bigger than 5.5 prey)
+          // Mouse predator: 14 (overridden after construction in click handler)
+          this.size = isPredator ? 8 : 5.5;
+          this.alpha = 0;
+          this.targetAlpha = isPredator ? 0.95 : 0.6;
+          // Predator: hot magenta-red (hue 340), shifts toward 10 (orange) over time
+          // Prey: cyan (hue 195)
+          this.baseHue = isPredator ? 340 : 195;
+          this.hueShift = 0;
+          // Smoothed render angle (decoupled from physics) — kills tip flicker
+          this.renderAngle = a;
+        }
+      }
+
+      // ----- Flock setup -----
+      const PREY_COUNT = window.innerWidth < 700 ? 45 : 80;
+      const MAX_PREDATORS = 3;
+      const boids = [];
+      for (let i = 0; i < PREY_COUNT; i++) {
+        boids.push(new Boid(Math.random() * W, Math.random() * H, false));
+      }
+
+      // ----- Steering helpers -----
+      const SEP_R = 24, ALI_R = 55, COH_R = 60, AVOID_PRED_R = 95;
+      const MAX_FORCE = 0.018;
+      const PRED_SEP_R = 160; // predators repel each other within this radius
+
+      function limit(vx, vy, max) {
+        const m2 = vx * vx + vy * vy;
+        if (m2 > max * max) {
+          const m = Math.sqrt(m2);
+          return [vx / m * max, vy / m * max];
+        }
+        return [vx, vy];
+      }
+
+      // Eating: predator catches a prey if they overlap. Prey gets "eaten"
+      //   → marked for removal → respawned from a random edge so flock stays ~same size.
+      // Runs before force calculation so eaten prey don't influence this frame.
+      function resolveEating() {
+        const preds = boids.filter(b => b.isPredator);
+        if (preds.length === 0) return;
+        const preyEatenIdx = [];
+        for (let i = 0; i < boids.length; i++) {
+          const b = boids[i];
+          if (b.isPredator) continue;
+          for (const p of preds) {
+            if (p.alpha < 0.25) continue; // still fading in, can't eat yet
+            const dx = b.x - p.x, dy = b.y - p.y;
+            // Wider catch radius — was 0.55, now 0.95 (effective range ~13px audio, ~18px mouse)
+            const catchR = (b.size + p.size) * 0.95;
+            if (dx * dx + dy * dy < catchR * catchR) {
+              preyEatenIdx.push(i);
+              p.ateCount = (p.ateCount || 0) + 1;
+              break;
+            }
+          }
+        }
+        // Respawn eaten prey from the opposite side of the canvas (fresh pool)
+        for (const i of preyEatenIdx) {
+          const b = boids[i];
+          const edge = Math.floor(Math.random() * 4);
+          if (edge === 0)      { b.x = -10; b.y = Math.random() * H; }
+          else if (edge === 1) { b.x = W + 10; b.y = Math.random() * H; }
+          else if (edge === 2) { b.x = Math.random() * W; b.y = -10; }
+          else                 { b.x = Math.random() * W; b.y = H + 10; }
+          const a = Math.random() * Math.PI * 2;
+          const s = 0.7 + Math.random() * 0.6;
+          b.vx = Math.cos(a) * s; b.vy = Math.sin(a) * s;
+          b.alpha = 0;            // fade back in
+          b.renderAngle = a;
+        }
+      }
+
+      function step() {
+        resolveEating();
+        const preds = boids.filter(b => b.isPredator);
+        // Panic boost: prey speed up to ~1.45x when predators are around
+        const panicBoost = preds.length > 0 ? 1.45 : 1.0;
+        for (const b of boids) {
+          // Mouse predator is positioned by the cursor — skip physics entirely
+          if (b.isMousePred) {
+            b.alpha += (b.targetAlpha - b.alpha) * 0.06;
+            b.hueShift = Math.min(b.hueShift + 0.15, 25);
+            // Render angle follows velocity (set by syncMousePredator)
+            if (b.vx * b.vx + b.vy * b.vy > 0.04) {
+              const target = Math.atan2(b.vy, b.vx);
+              let d = target - b.renderAngle;
+              while (d >  Math.PI) d -= Math.PI * 2;
+              while (d < -Math.PI) d += Math.PI * 2;
+              b.renderAngle += d * 0.25;
+            }
+            continue;
+          }
+          if (!b.isPredator) {
+            // Smooth lerp into / out of panic so transition isn't a jolt
+            const target = b.basePreySpeed * panicBoost;
+            b.maxSpeed += (target - b.maxSpeed) * 0.04;
+          }
+          let sepX = 0, sepY = 0, sepCount = 0;
+          let aliX = 0, aliY = 0, aliCount = 0;
+          let cohX = 0, cohY = 0, cohCount = 0;
+          let avoidX = 0, avoidY = 0;
+          let chaseX = 0, chaseY = 0, chaseDistMin = Infinity;
+
+          if (!b.isPredator) {
+            // PREY behavior
+            for (const o of boids) {
+              if (o === b || o.isPredator) continue;
+              const dx = b.x - o.x, dy = b.y - o.y;
+              const d2 = dx * dx + dy * dy;
+              if (d2 === 0) continue;
+              if (d2 < SEP_R * SEP_R) {
+                const d = Math.sqrt(d2);
+                sepX += dx / d; sepY += dy / d; sepCount++;
+              }
+              if (d2 < ALI_R * ALI_R) { aliX += o.vx; aliY += o.vy; aliCount++; }
+              if (d2 < COH_R * COH_R) { cohX += o.x; cohY += o.y; cohCount++; }
+            }
+            // Avoid predators
+            for (const p of preds) {
+              const dx = b.x - p.x, dy = b.y - p.y;
+              const d2 = dx * dx + dy * dy;
+              if (d2 < AVOID_PRED_R * AVOID_PRED_R && d2 > 0) {
+                const d = Math.sqrt(d2);
+                const w = (AVOID_PRED_R - d) / AVOID_PRED_R;
+                avoidX += (dx / d) * w * 4;
+                avoidY += (dy / d) * w * 4;
+              }
+            }
+          } else {
+            // PREDATOR behavior — seek nearest prey
+            for (const o of boids) {
+              if (o.isPredator) continue;
+              const dx = o.x - b.x, dy = o.y - b.y;
+              const d2 = dx * dx + dy * dy;
+              if (d2 < chaseDistMin) {
+                chaseDistMin = d2;
+                chaseX = dx; chaseY = dy;
+              }
+            }
+            // Repel from other predators when too close (territorial spacing)
+            for (const p of preds) {
+              if (p === b) continue;
+              const dx = b.x - p.x, dy = b.y - p.y;
+              const d2 = dx * dx + dy * dy;
+              if (d2 < PRED_SEP_R * PRED_SEP_R && d2 > 0) {
+                const d = Math.sqrt(d2);
+                // Inverse-quadratic: very strong push when close, gentle far away
+                const w = (PRED_SEP_R - d) / PRED_SEP_R;
+                avoidX += (dx / d) * w * w * 6;
+                avoidY += (dy / d) * w * w * 6;
+              }
+            }
+          }
+
+          // Compose acceleration
+          let ax = 0, ay = 0;
+          if (sepCount) { ax += (sepX / sepCount) * 0.9; ay += (sepY / sepCount) * 0.9; }
+          if (aliCount) {
+            const [vx, vy] = limit(aliX / aliCount - b.vx, aliY / aliCount - b.vy, MAX_FORCE * 3);
+            ax += vx; ay += vy;
+          }
+          if (cohCount) {
+            const tx = cohX / cohCount - b.x, ty = cohY / cohCount - b.y;
+            const m = Math.sqrt(tx * tx + ty * ty);
+            if (m > 0) {
+              const dx = tx / m * b.maxSpeed - b.vx;
+              const dy = ty / m * b.maxSpeed - b.vy;
+              const [fx, fy] = limit(dx, dy, MAX_FORCE * 1.5);
+              ax += fx; ay += fy;
+            }
+          }
+          ax += avoidX * 0.035;
+          ay += avoidY * 0.035;
+          if (b.isPredator && chaseDistMin < Infinity) {
+            const m = Math.sqrt(chaseX * chaseX + chaseY * chaseY);
+            if (m > 0) {
+              const dx = chaseX / m * b.maxSpeed - b.vx;
+              const dy = chaseY / m * b.maxSpeed - b.vy;
+              ax += dx * 0.05;
+              ay += dy * 0.05;
+            }
+          }
+
+          b.vx += ax;
+          b.vy += ay;
+          [b.vx, b.vy] = limit(b.vx, b.vy, b.maxSpeed);
+          b.x += b.vx;
+          b.y += b.vy;
+
+          // Wrap edges
+          if (b.x < -10) b.x = W + 10;
+          if (b.x > W + 10) b.x = -10;
+          if (b.y < -10) b.y = H + 10;
+          if (b.y > H + 10) b.y = -10;
+
+          // Alpha lerp
+          b.alpha += (b.targetAlpha - b.alpha) * 0.04;
+          // Predator hue shift over lifetime (340 magenta → 350 → 0 red)
+          if (b.isPredator) b.hueShift = Math.min(b.hueShift + 0.12, 20);
+
+          // Smoothed render angle — decoupled from physics so tips stop flickering
+          // Only update when actually moving meaningfully
+          const sp2 = b.vx * b.vx + b.vy * b.vy;
+          if (sp2 > 0.04) {
+            const target = Math.atan2(b.vy, b.vx);
+            // Wrap shortest-path delta into [-PI, PI]
+            let d = target - b.renderAngle;
+            while (d >  Math.PI) d -= Math.PI * 2;
+            while (d < -Math.PI) d += Math.PI * 2;
+            b.renderAngle += d * 0.18; // smooth follow
+          }
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        for (const b of boids) {
+          if (b.alpha < 0.02) continue;
+          ctx.save();
+          ctx.translate(b.x, b.y);
+          ctx.rotate(b.renderAngle); // smoothed angle, no flicker
+          ctx.globalAlpha = b.alpha;
+          const hue = b.baseHue + (b.isPredator ? b.hueShift : 0);
+          if (b.isPredator) {
+            // Soft red/magenta halo first (so triangle sits on top)
+            const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, b.size * 2.4);
+            grad.addColorStop(0, `hsla(${hue}, 95%, 60%, ${b.alpha * 0.55})`);
+            grad.addColorStop(1, `hsla(${hue}, 95%, 60%, 0)`);
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(0, 0, b.size * 2.4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.globalAlpha = b.alpha;
+          }
+          // Triangle body
+          ctx.fillStyle = b.isPredator
+            ? `hsl(${hue}, 95%, 62%)`
+            : `hsl(${hue}, 55%, 65%)`;
+          ctx.beginPath();
+          ctx.moveTo(b.size, 0);
+          ctx.lineTo(-b.size * 0.6, -b.size * 0.55);
+          ctx.lineTo(-b.size * 0.6,  b.size * 0.55);
+          ctx.closePath();
+          ctx.fill();
+          if (b.isPredator) {
+            // Bright contour for definition
+            ctx.lineWidth = 1.4;
+            ctx.strokeStyle = `hsl(${hue}, 100%, 78%)`;
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
+      }
+
+      // ===========================================================
+      // AUDIO ANALYSIS (Web Audio API)
+      // ===========================================================
+      const audio = document.getElementById('bg-music');
+      const musicBtn = document.getElementById('music-toggle');
+      const loopBtn = document.getElementById('music-loop');
+      const musicCtl = document.getElementById('music-control');
+      const musicLabel = document.getElementById('music-label');
+      const musicIcon = document.getElementById('music-icon');
+
+      let audioCtx = null, analyser = null, dataArr = null, sourceNode = null;
+      let musicPlaying = false, musicLooping = false;
+
+      // Enable debug overlay if ?debug=1 in URL
+      if (new URLSearchParams(location.search).get('debug') === '1') {
+        const dbg = document.getElementById('flock-debug');
+        if (dbg) { dbg.style.display = 'block'; window.__flockDebug = dbg; }
+      }
+
+      // Track baseline for "energetic" detection
+      let baselineEnergy = 0;
+      // Frames remaining of "fast baseline catch-up" after a seek
+      let seekRampFrames = 0;
+
+      function initAudio() {
+        if (audioCtx) return;
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return;
+        audioCtx = new Ctx();
+        sourceNode = audioCtx.createMediaElementSource(audio);
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 256;
+        analyser.smoothingTimeConstant = 0.6; // lower = more responsive to peaks
+        sourceNode.connect(analyser);
+        analyser.connect(audioCtx.destination);
+        dataArr = new Uint8Array(analyser.frequencyBinCount);
+      }
+
+      function readSpectrum() {
+        if (!analyser || !musicPlaying) return null;
+        analyser.getByteFrequencyData(dataArr);
+        const len = dataArr.length;
+        const lowEnd = Math.floor(len * 0.18);    // 0-18% — bass / kick
+        const highStart = Math.floor(len * 0.45); // 45-100% — mids/highs
+        let lowSum = 0, highSum = 0, totalSum = 0;
+        for (let i = 0; i < lowEnd; i++) lowSum += dataArr[i];
+        for (let i = highStart; i < len; i++) highSum += dataArr[i];
+        for (let i = 0; i < len; i++) totalSum += dataArr[i];
+        const lowMean = lowSum / lowEnd;
+        const highMean = highSum / (len - highStart);
+        const total = totalSum / len;
+        return { lowMean, highMean, total };
+      }
+
+      // Predator spawning logic (every ~6 frames ≈ 10Hz)
+      let predTick = 0;
+      function audioReactPredators() {
+        predTick++;
+        if (predTick < 6) return;
+        predTick = 0;
+
+        const s = readSpectrum();
+        if (!s) {
+          // No music — slow fade out audio-spawned predators only
+          for (const b of boids) if (b.isPredator && !b.isMousePred) b.targetAlpha = 0;
+          for (let i = boids.length - 1; i >= 0; i--) {
+            const b = boids[i];
+            if (b.isPredator && !b.isMousePred && b.alpha < 0.03) boids.splice(i, 1);
+          }
+          return;
+        }
+
+        // Baseline catch-up: normally very slow (0.3%/frame), but after a seek we
+        // ramp it ~10x faster for ~3s so a sudden new section doesn't read as a
+        // false "energetic" spike.
+        if (seekRampFrames > 0) {
+          baselineEnergy = baselineEnergy * 0.93 + s.total * 0.07;
+          seekRampFrames--;
+        } else {
+          baselineEnergy = baselineEnergy * 0.997 + s.total * 0.003;
+        }
+
+        // Calibrated against the user's perceptual reference points on Seemann:
+        //   intense moments measured at total~112-116, high~38-41
+        //   moments user perceives as "soft" sit at total~72-94, high~18-34
+        // So the perceptual boundary is around total≈100 + high≈32.
+        const energetic = (s.total > 100 && s.highMean > 30)
+                       || (s.total > baselineEnergy * 1.30 && s.highMean > 28);
+        // Calm: either overall energy drops below the perceptual floor OR
+        //   the highs really thin out (vocals + bright harmonics gone).
+        const calm = (s.total < 92) || (s.highMean < 22);
+
+        // Live debug overlay (toggle with ?debug=1 in the URL)
+        if (window.__flockDebug) {
+          window.__flockDebug.textContent =
+            `low ${s.lowMean.toFixed(0).padStart(3)}  high ${s.highMean.toFixed(0).padStart(3)}  ` +
+            `tot ${s.total.toFixed(0).padStart(3)}  base ${baselineEnergy.toFixed(0).padStart(3)}  ` +
+            `${energetic ? 'ENERGETIC ' : ''}${calm ? 'CALM ' : ''}` +
+            `preds:${boids.filter(b => b.isPredator).length}`;
+        }
+
+        // Only count audio-spawned predators for the cap + alpha control —
+        // the mouse predator is managed separately by the user.
+        const currentPreds = boids.filter(b => b.isPredator && !b.isMousePred);
+
+        if (energetic && currentPreds.length < MAX_PREDATORS) {
+          // Spawn from the edge position furthest from existing predators
+          // (8 candidate samples; pick max-min-distance) so they don't clump.
+          let best = null, bestMinDist = -1;
+          const existing = boids.filter(b => b.isPredator);
+          for (let attempt = 0; attempt < 8; attempt++) {
+            const edge = Math.floor(Math.random() * 4);
+            let x, y;
+            if (edge === 0)      { x = -20; y = Math.random() * H; }
+            else if (edge === 1) { x = W + 20; y = Math.random() * H; }
+            else if (edge === 2) { x = Math.random() * W; y = -20; }
+            else                 { x = Math.random() * W; y = H + 20; }
+            let minD = Infinity;
+            for (const o of existing) {
+              const dx = x - o.x, dy = y - o.y;
+              const d = Math.sqrt(dx * dx + dy * dy);
+              if (d < minD) minD = d;
+            }
+            if (minD > bestMinDist) { bestMinDist = minD; best = { x, y }; }
+          }
+          boids.push(new Boid(best.x, best.y, true));
+        }
+
+        if (calm) {
+          for (const b of currentPreds) b.targetAlpha = 0;
+        } else {
+          for (const b of currentPreds) b.targetAlpha = 0.85;
+        }
+
+        // Garbage-collect invisible audio-spawned predators (never the mouse pred)
+        for (let i = boids.length - 1; i >= 0; i--) {
+          const b = boids[i];
+          if (b.isPredator && !b.isMousePred && b.alpha < 0.02 && b.targetAlpha < 0.05) {
+            boids.splice(i, 1);
+          }
+        }
+      }
+
+      // ===========================================================
+      // MUSIC CONTROLS
+      // ===========================================================
+      const ICON_PLAY = '<path d="M8 5v14l11-7z"/>';
+      const ICON_PAUSE = '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
+
+      async function togglePlay() {
+        if (!audioCtx) initAudio();
+        if (audioCtx && audioCtx.state === 'suspended') {
+          try { await audioCtx.resume(); } catch (e) {}
+        }
+        if (musicPlaying) {
+          audio.pause();
+          musicPlaying = false;
+          musicIcon.innerHTML = ICON_PLAY;
+          musicBtn.classList.remove('active');
+          musicLabel.textContent = 'paused';
+          // Keep playing class so seek bar stays visible while paused
+        } else {
+          try {
+            await audio.play();
+            musicPlaying = true;
+            musicIcon.innerHTML = ICON_PAUSE;
+            musicBtn.classList.add('active');
+            musicCtl.classList.add('playing');
+            musicLabel.textContent = fmtTime(audio.currentTime);
+            musicCtl.classList.remove('hint');
+          } catch (e) {
+            musicLabel.textContent = 'error';
+          }
+        }
+      }
+
+      musicBtn.addEventListener('click', togglePlay);
+
+      loopBtn.addEventListener('click', () => {
+        musicLooping = !musicLooping;
+        audio.loop = musicLooping;
+        loopBtn.classList.toggle('active', musicLooping);
+        musicLabel.textContent = musicLooping ? 'loop on' : (musicPlaying ? 'playing' : 'music');
+      });
+
+      audio.addEventListener('ended', () => {
+        if (!musicLooping) {
+          musicPlaying = false;
+          musicIcon.innerHTML = ICON_PLAY;
+          musicBtn.classList.remove('active');
+          musicLabel.textContent = 'ended';
+        }
+      });
+
+      // ===========================================================
+      // SEEK BAR — progress, hover tooltip, click-to-seek, smooth transition
+      // ===========================================================
+      const seekInput   = document.getElementById('music-seek');
+      const seekFill    = document.getElementById('music-seek-fill');
+      const seekHover   = document.getElementById('music-seek-hover');
+      const seekTooltip = document.getElementById('music-tooltip');
+      const seekWrap    = document.getElementById('music-seek-wrap');
+      let userSeeking = false; // suppress timeupdate while dragging
+
+      function fmtTime(t) {
+        if (!isFinite(t) || t < 0) t = 0;
+        const m = Math.floor(t / 60);
+        const s = Math.floor(t % 60);
+        return m + ':' + (s < 10 ? '0' + s : s);
+      }
+
+      // Update progress bar + label as song plays
+      audio.addEventListener('timeupdate', () => {
+        if (userSeeking || !audio.duration) return;
+        const pct = (audio.currentTime / audio.duration) * 100;
+        seekFill.style.width = pct + '%';
+        seekInput.value = Math.round(pct * 10);
+        if (musicPlaying) {
+          musicLabel.textContent = fmtTime(audio.currentTime);
+        }
+      });
+
+      audio.addEventListener('loadedmetadata', () => {
+        seekFill.style.width = '0%';
+        seekInput.value = 0;
+      });
+
+      // Keyboard-only: arrow keys on the (invisible) native input still work
+      seekInput.addEventListener('input', () => {
+        if (!audio.duration) return;
+        const pct = seekInput.value / 10;
+        seekFill.style.width = pct + '%';
+        audio.currentTime = (seekInput.value / 1000) * audio.duration;
+      });
+
+      // Helper: compute the click-local X inside the wrap (clamped)
+      function localX(clientX) {
+        const rect = seekWrap.getBoundingClientRect();
+        return Math.max(0, Math.min(rect.width, clientX - rect.left));
+      }
+
+      function applySeek(clientX) {
+        if (!audio.duration) return;
+        const rect = seekWrap.getBoundingClientRect();
+        const x = localX(clientX);
+        const pct = x / rect.width;
+        audio.currentTime = pct * audio.duration;
+        seekFill.style.width = (pct * 100) + '%';
+        seekInput.value = Math.round(pct * 1000);
+      }
+
+      // Primary interaction — pointer events handle drag
+      seekWrap.addEventListener('pointerdown', (e) => {
+        if (!audio.duration) return;
+        userSeeking = true;
+        applySeek(e.clientX);
+        try { seekWrap.setPointerCapture(e.pointerId); } catch (_) {}
+
+        const onMove = (ev) => { ev.preventDefault(); applySeek(ev.clientX); };
+        const onUp = () => {
+          userSeeking = false;
+          try { seekWrap.releasePointerCapture(e.pointerId); } catch (_) {}
+          seekWrap.removeEventListener('pointermove', onMove);
+          window.removeEventListener('pointerup', onUp);
+          window.removeEventListener('pointercancel', onUp);
+        };
+        seekWrap.addEventListener('pointermove', onMove);
+        window.addEventListener('pointerup', onUp);
+        window.addEventListener('pointercancel', onUp);
+      });
+
+      // Click backup — guarantees seeking even if pointerdown is intercepted
+      // by some browser quirk. Idempotent with pointerdown (same applySeek call).
+      seekWrap.addEventListener('click', (e) => {
+        if (!audio.duration) return;
+        applySeek(e.clientX);
+      });
+
+      // After a real seek lands — smooth simulation transition:
+      //   1. Fade existing predators out (they re-spawn naturally if new section warrants)
+      //   2. Reset baseline so the post-seek frames don't fight a stale running average
+      //   3. Trigger fast baseline catch-up window (~3s)
+      audio.addEventListener('seeked', () => {
+        for (const b of boids) if (b.isPredator) b.targetAlpha = 0;
+        baselineEnergy = 0;       // start fresh
+        seekRampFrames = 30;      // ~3s of fast catch-up at 10Hz tick rate
+        if (musicPlaying) musicLabel.textContent = fmtTime(audio.currentTime);
+      });
+
+      // Hover tooltip — shows the time the user would seek to (only true hover, not during drag)
+      seekWrap.addEventListener('pointermove', (e) => {
+        if (!audio.duration) return;
+        if (e.pointerType !== 'mouse') return; // tooltip on mouse only
+        const rect = seekWrap.getBoundingClientRect();
+        const x = localX(e.clientX);
+        const pct = (x / rect.width) * 100;
+        const t = (x / rect.width) * audio.duration;
+        seekHover.style.width = pct + '%';
+        seekTooltip.textContent = fmtTime(t);
+        seekTooltip.style.left = x + 'px';
+      });
+      seekWrap.addEventListener('pointerleave', () => {
+        seekHover.style.width = '0%';
+      });
+
+      // ===========================================================
+      // MOUSE-AS-PREDATOR MODE — cursor becomes a predator, independent of audio
+      // ===========================================================
+      const mousePredBtn = document.getElementById('mouse-predator');
+      let mousePredOn = false;
+      let mousePredBoid = null;
+      const mouse = { x: -9999, y: -9999, prevX: 0, prevY: 0 };
+
+      mousePredBtn.addEventListener('click', () => {
+        mousePredOn = !mousePredOn;
+        mousePredBtn.classList.toggle('active', mousePredOn);
+        document.body.classList.toggle('mouse-predator', mousePredOn);
+        if (mousePredOn) {
+          mousePredBoid = new Boid(mouse.x, mouse.y, true);
+          mousePredBoid.isMousePred = true;     // flag so physics skips it
+          mousePredBoid.targetAlpha = 0.95;
+          mousePredBoid.size = 14;              // bigger than audio preds (8) and prey (5.5)
+          mousePredBoid.baseHue = 0;            // pure red
+          boids.push(mousePredBoid);
+        } else if (mousePredBoid) {
+          mousePredBoid.targetAlpha = 0;        // fade out naturally
+          mousePredBoid = null;
+        }
+      });
+
+      // Track mouse position globally (window-wide so it works over the nav too)
+      window.addEventListener('pointermove', (e) => {
+        mouse.prevX = mouse.x;
+        mouse.prevY = mouse.y;
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+      });
+
+      // Per-frame: snap the mouse predator to the cursor and give it a velocity
+      // derived from actual mouse motion (so triangle points where you're moving)
+      function syncMousePredator() {
+        if (!mousePredOn || !mousePredBoid) return;
+        const vx = mouse.x - mouse.prevX;
+        const vy = mouse.y - mouse.prevY;
+        mousePredBoid.x = mouse.x;
+        mousePredBoid.y = mouse.y;
+        // If mouse isn't moving, keep last velocity (prevents a 0-length triangle)
+        const m2 = vx * vx + vy * vy;
+        if (m2 > 0.5) { mousePredBoid.vx = vx * 0.3; mousePredBoid.vy = vy * 0.3; }
+        // Ease prev toward current so resting mouse gradually decays "speed"
+        mouse.prevX += (mouse.x - mouse.prevX) * 0.15;
+        mouse.prevY += (mouse.y - mouse.prevY) * 0.15;
+      }
+
+      // Auto-dismiss the hint pulse after 8s if untouched
+      setTimeout(() => musicCtl.classList.remove('hint'), 8000);
+
+      // ===========================================================
+      // ANIMATION LOOP
+      // ===========================================================
+      function loop() {
+        syncMousePredator();
+        step();
+        audioReactPredators();
+        draw();
+        requestAnimationFrame(loop);
+      }
+      loop();
+    })();
   </script>
 </body>
 </html>
